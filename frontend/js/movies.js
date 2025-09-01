@@ -119,7 +119,6 @@ class MoviesManager {
 
     let paginationHTML = '<div class="pagination">';
 
-    // Botón anterior
     if (hasPrev) {
       paginationHTML += `
         <button class="pagination-btn" onclick="moviesManager.loadMovies(${page - 1})">
@@ -128,7 +127,6 @@ class MoviesManager {
       `;
     }
 
-    // Números de página
     const startPage = Math.max(1, page - 2);
     const endPage = Math.min(pages, page + 2);
 
@@ -141,7 +139,6 @@ class MoviesManager {
       `;
     }
 
-    // Botón siguiente
     if (hasNext) {
       paginationHTML += `
         <button class="pagination-btn" onclick="moviesManager.loadMovies(${page + 1})">
@@ -169,7 +166,6 @@ class MoviesManager {
 
   // Configurar event listeners
   setupEventListeners() {
-    // Filtro por categoría
     const categoryFilter = document.getElementById('category-filter');
     if (categoryFilter) {
       categoryFilter.addEventListener('change', (e) => {
@@ -178,7 +174,6 @@ class MoviesManager {
       });
     }
 
-    // Filtro de ordenamiento
     const sortFilter = document.getElementById('sort-filter');
     if (sortFilter) {
       sortFilter.addEventListener('change', (e) => {
@@ -187,7 +182,6 @@ class MoviesManager {
       });
     }
 
-    // Barra de búsqueda
     const searchInput = document.getElementById('search-input');
     const searchBtn = document.getElementById('search-btn');
 
@@ -208,7 +202,6 @@ class MoviesManager {
         }
       });
 
-      // Búsqueda en tiempo real con debounce
       let searchTimeout;
       searchInput.addEventListener('input', () => {
         clearTimeout(searchTimeout);
@@ -222,7 +215,6 @@ class MoviesManager {
       });
     }
 
-    // Botón limpiar filtros
     const clearFiltersBtn = document.getElementById('clear-filters-btn');
     if (clearFiltersBtn) {
       clearFiltersBtn.addEventListener('click', () => {
@@ -231,11 +223,9 @@ class MoviesManager {
     }
   }
 
-  // Limpiar todos los filtros
   clearFilters() {
     this.currentFilters = {};
     
-    // Resetear elementos del DOM
     const categoryFilter = document.getElementById('category-filter');
     const sortFilter = document.getElementById('sort-filter');
     const searchInput = document.getElementById('search-input');
@@ -247,21 +237,16 @@ class MoviesManager {
     this.loadMovies(1);
   }
 
-  // Mostrar/ocultar indicador de carga
   showLoading(show) {
     const loader = document.getElementById('loading-indicator');
     const container = document.getElementById('movies-container');
     
-    if (loader) {
-      loader.style.display = show ? 'block' : 'none';
-    }
-    
+    if (loader) loader.style.display = show ? 'block' : 'none';
     if (container && show) {
       container.innerHTML = '<div class="loading-movies">Cargando películas...</div>';
     }
   }
 
-  // Mostrar mensaje de error
   showError(message) {
     const container = document.getElementById('movies-container');
     if (container) {
@@ -277,7 +262,6 @@ class MoviesManager {
     }
   }
 
-  // Utilidades
   escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
@@ -290,21 +274,13 @@ class MoviesManager {
   }
 }
 
-// Función global para ver detalles de película
+// Función global para ver detalles
 async function viewMovieDetails(movieId) {
-  try {
-    // Guardar ID en localStorage para la página de detalles
-    localStorage.setItem('currentMovieId', movieId);
-    
-    // Redirigir a la página de detalles
-    window.location.href = 'detail.html';
-  } catch (error) {
-    console.error('Error al ver detalles:', error);
-    alert('Error al cargar los detalles de la película');
-  }
+  localStorage.setItem('currentMovieId', movieId);
+  window.location.href = 'detail.html';
 }
 
-// Cargar películas populares para el index
+// Index: cargar populares
 async function loadPopularMovies() {
   try {
     const response = await api.getPopularMovies(6);
@@ -316,7 +292,7 @@ async function loadPopularMovies() {
   }
 }
 
-// Cargar películas recientes para el index
+// Index: cargar recientes
 async function loadRecentMovies() {
   try {
     const response = await api.getRecentMovies(6);
@@ -328,25 +304,21 @@ async function loadRecentMovies() {
   }
 }
 
-// Renderizar películas populares en el index
+// Render populares
 function renderPopularMovies(movies) {
-  const container = document.getElementById('popular-movies');
+  const container = document.getElementById('popular-movies-container');
   if (!container || !movies.length) return;
-
-  const moviesHTML = movies.map(movie => createIndexMovieCard(movie)).join('');
-  container.innerHTML = moviesHTML;
+  container.innerHTML = movies.map(movie => createIndexMovieCard(movie)).join('');
 }
 
-// Renderizar películas recientes en el index
+// Render recientes
 function renderRecentMovies(movies) {
-  const container = document.getElementById('recent-movies');
+  const container = document.getElementById('recent-movies-container');
   if (!container || !movies.length) return;
-
-  const moviesHTML = movies.map(movie => createIndexMovieCard(movie)).join('');
-  container.innerHTML = moviesHTML;
+  container.innerHTML = movies.map(movie => createIndexMovieCard(movie)).join('');
 }
 
-// Crear card simplificada para el index
+// Card en index
 function createIndexMovieCard(movie) {
   const defaultImage = 'assets/img/placeholder-movie.jpg';
   const imageUrl = movie.image || defaultImage;
@@ -367,16 +339,13 @@ function createIndexMovieCard(movie) {
   `;
 }
 
-// Inicializar manager de películas solo en la página correspondiente
+// Inicializar
 let moviesManager;
 document.addEventListener('DOMContentLoaded', () => {
-  // Si estamos en la página de películas
   if (document.getElementById('movies-container')) {
     moviesManager = new MoviesManager();
   }
-  
-  // Si estamos en el index, cargar películas destacadas
-  if (document.getElementById('popular-movies') || document.getElementById('recent-movies')) {
+  if (document.getElementById('popular-movies-container') || document.getElementById('recent-movies-container')) {
     loadPopularMovies();
     loadRecentMovies();
   }

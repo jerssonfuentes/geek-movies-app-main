@@ -1,195 +1,138 @@
 // backend/models/movie.model.js
-const { ObjectId } = require('mongodb');
+// =====================================
+// MODELO DE PELÍCULAS (Driver Oficial MongoDB - Opción 1)
+// Usamos funciones puras que reciben la conexión desde db.js
+// =====================================
 
-class MovieModel {
-  constructor(db) {
-    this.collection = db.collection('movies');
-    this.reviewsCollection = db.collection('reviews');
-  }
+const { ObjectId } = require("mongodb");
+const { getDb } = require("../config/db");
 
-  // Crear índices para optimizar búsquedas
-  async createIndexes() {
-    await this.collection.createIndex({ title: 1 }, { unique: true });
-    await this.collection.createIndex({ category: 1 });
-    await this.collection.createIndex({ year: 1 });
-    await this.collection.createIndex({ rating: -1 });
-    await this.collection.createIndex({ createdAt: -1 });
-  }
+// Nombre de la colección
+const MOVIE_COLLECTION = "movies";
 
-  // Crear película
-  async create(movieData) {
-    const movie = {
-      ...movieData,
-      rating: 0,
-      reviewCount: 0,
-      likeCount: 0,
-      approved: false,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    const result = await this.collection.insertOne(movie);
-    return { ...movie, _id: result.insertedId };
-  }
-
-  // Obtener todas las películas con paginación y filtros
-  async findAll(options = {}) {
-    const {
-      page = 1,
-      limit = 12,
-      category = null,
-      approved = true,
-      sortBy = 'rating',
-      sortOrder = -1,
-      search = null
-    } = options;
-
-    const skip = (page - 1) * limit;
-    const filter = { approved };
-
-    // Filtro por categoría
-    if (category) {
-      filter.category = category;
-    }
-
-    // Filtro por búsqueda en título
-    if (search) {
-      filter.title = { $regex: search, $options: 'i' };
-    }
-
-    // Opciones de ordenamiento
-    let sort = {};
-    if (sortBy === 'rating') {
-      sort = { rating: sortOrder, reviewCount: -1 };
-    } else if (sortBy === 'year') {
-      sort = { year: sortOrder };
-    } else if (sortBy === 'title') {
-      sort = { title: sortOrder };
-    } else if (sortBy === 'newest') {
-      sort = { createdAt: -1 };
-    }
-
-    const [movies, total] = await Promise.all([
-      this.collection
-        .find(filter)
-        .sort(sort)
-        .skip(skip)
-        .limit(limit)
-        .toArray(),
-      this.collection.countDocuments(filter)
-    ]);
-
-    return {
-      movies,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit),
-        hasNext: page < Math.ceil(total / limit),
-        hasPrev: page > 1
-      }
-    };
-  }
-
-  // Obtener película por ID
-  async findById(id) {
-    if (!ObjectId.isValid(id)) {
-      throw new Error('ID inválido');
-    }
-    return await this.collection.findOne({ _id: new ObjectId(id) });
-  }
-
-  // Obtener película por título
-  async findByTitle(title) {
-    return await this.collection.findOne({ 
-      title: { $regex: `^${title}$`, $options: 'i' } 
-    });
-  }
-
-  // Actualizar película
-  async update(id, updateData) {
-    if (!ObjectId.isValid(id)) {
-      throw new Error('ID inválido');
-    }
-
-    const result = await this.collection.updateOne(
-      { _id: new ObjectId(id) },
-      { 
-        $set: { 
-          ...updateData, 
-          updatedAt: new Date() 
-        } 
-      }
-    );
-
-    return result.modifiedCount > 0;
-  }
-
-  // Eliminar película
-  async delete(id) {
-    if (!ObjectId.isValid(id)) {
-      throw new Error('ID inválido');
-    }
-
-    const result = await this.collection.deleteOne({ _id: new ObjectId(id) });
-    return result.deletedCount > 0;
-  }
-
-  // Aprobar película (solo admin)
-  async approve(id) {
-    return await this.update(id, { approved: true });
-  }
-
-  // Actualizar rating y estadísticas
-  async updateStats(id, rating, reviewCount, likeCount) {
-    if (!ObjectId.isValid(id)) {
-      throw new Error('ID inválido');
-    }
-
-    const result = await this.collection.updateOne(
-      { _id: new ObjectId(id) },
-      { 
-        $set: { 
-          rating: parseFloat(rating.toFixed(1)), 
-          reviewCount, 
-          likeCount,
-          updatedAt: new Date()
-        } 
-      }
-    );
-
-    return result.modifiedCount > 0;
-  }
-
-  // Obtener películas populares (más reseñas y mejor rating)
-  async getPopular(limit = 6) {
-    return await this.collection
-      .find({ approved: true, reviewCount: { $gt: 0 } })
-      .sort({ rating: -1, reviewCount: -1 })
-      .limit(limit)
-      .toArray();
-  }
-
-  // Obtener películas recientes
-  async getRecent(limit = 6) {
-    return await this.collection
-      .find({ approved: true })
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .toArray();
-  }
-
-  // Obtener estadísticas generales
-  async getStats() {
-    const [totalMovies, totalApproved, totalPending] = await Promise.all([
-      this.collection.countDocuments({}),
-      this.collection.countDocuments({ approved: true }),
-      this.collection.countDocuments({ approved: false })
-    ]);
-
-    return { totalMovies, totalApproved, totalPending };
-  }
+/**
+ * Obtiene la colección de películas.
+ * @returns {Collection} referencia a la colección en MongoDB
+ */
+function getMovieCollection() {
+  const db = getDb();
+  return db.collection(MOVIE_COLLECTION);
 }
 
-module.exports = MovieModel;
+/**
+ * Obtiene todas las películas con paginación.
+ */
+async function getAll({ page = 1, limit = 12, category }) {
+  const skip = (page - 1) * limit;
+  const query = category ? { category: new ObjectId(category) } : {};
+
+  const collection = getMovieCollection();
+
+  const [movies, total] = await Promise.all([
+    collection.find(query).skip(skip).limit(limit).toArray(),
+    collection.countDocuments(query)
+  ]);
+
+  return {
+    movies,
+    pagination: {
+      page,
+      limit,
+      total,
+      pages: Math.ceil(total / limit),
+      hasNext: page * limit < total,
+      hasPrev: page > 1
+    }
+  };
+}
+
+/**
+ * Obtiene una película por ID.
+ */
+async function getById(id) {
+  const collection = getMovieCollection();
+  return await collection.findOne({ _id: new ObjectId(id) });
+}
+
+/**
+ * Crea una nueva película.
+ */
+async function create(data) {
+  const collection = getMovieCollection();
+  const result = await collection.insertOne({
+    ...data,
+    createdAt: new Date(),
+    approved: false,
+    rating: data.rating || 0,
+    reviewCount: data.reviewCount || 0
+  });
+  return await getById(result.insertedId);
+}
+
+/**
+ * Actualiza una película.
+ */
+async function update(id, data) {
+  const collection = getMovieCollection();
+  const result = await collection.findOneAndUpdate(
+    { _id: new ObjectId(id) },
+    { $set: { ...data, updatedAt: new Date() } },
+    { returnDocument: "after" }
+  );
+  return result.value;
+}
+
+/**
+ * Elimina una película.
+ */
+async function remove(id) {
+  const collection = getMovieCollection();
+  const result = await collection.findOneAndDelete({ _id: new ObjectId(id) });
+  return result.value;
+}
+
+/**
+ * Aprueba una película.
+ */
+async function approve(id) {
+  const collection = getMovieCollection();
+  const result = await collection.findOneAndUpdate(
+    { _id: new ObjectId(id) },
+    { $set: { approved: true, approvedAt: new Date() } },
+    { returnDocument: "after" }
+  );
+  return result.value;
+}
+
+/**
+ * Obtiene películas populares.
+ */
+async function getPopular(limit = 6) {
+  const collection = getMovieCollection();
+  return await collection.find({ approved: true })
+    .sort({ rating: -1, reviewCount: -1 })
+    .limit(limit)
+    .toArray();
+}
+
+/**
+ * Obtiene películas recientes.
+ */
+async function getRecent(limit = 6) {
+  const collection = getMovieCollection();
+  return await collection.find({ approved: true })
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .toArray();
+}
+
+module.exports = {
+  getAll,
+  getById,
+  create,
+  update,
+  remove,
+  approve,
+  getPopular,
+  getRecent
+};

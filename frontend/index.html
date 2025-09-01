@@ -3,58 +3,239 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geek Movies</title>
+  <title>GeekMovies - Descubre películas y series</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Navbar estilo Netflix -->
-  <header class="navbar">
-    <div class="logo">GeekMovies</div>
-    <nav>
-      <a href="index.html">Inicio</a>
-      <a href="movies.html">Películas</a>
-      <a href="login.html" id="login-link">Login</a>
-      <a href="register.html" id="register-link">Register</a>
-      <a href="#" id="logout-link" class="hidden">Logout</a>
-      <a href="admin.html" id="admin-link" class="hidden">Admin</a>
+  <!-- Header Navigation -->
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <a href="index.html" class="logo">
+            <h1>🎬 GeekMovies</h1>
+          </a>
+        </div>
+        
+        <div class="nav-links">
+          <a href="index.html" class="nav-link active">Películas</a>
+          <a href="#" class="nav-link">Series</a>
+          <a href="#" class="nav-link">Personas</a>
+          <a href="#" class="nav-link">Más</a>
+        </div>
+
+        <div class="nav-actions">
+          <div class="search-container">
+            <input type="text" id="global-search" class="search-input" placeholder="Buscar películas, series, personas...">
+            <button class="search-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="auth-section">
+            <div id="auth-buttons" class="auth-buttons">
+              <a href="login.html" class="btn btn-outline">Iniciar Sesión</a>
+              <a href="register.html" class="btn btn-primary">Registrarse</a>
+            </div>
+            
+            <div id="user-menu" class="user-menu" style="display: none;">
+              <div class="user-avatar">
+                <span id="username-display">U</span>
+              </div>
+              <div class="user-dropdown">
+                <div class="dropdown-content">
+                  <a href="#" class="dropdown-item">Mi perfil</a>
+                  <a href="#" class="dropdown-item">Mis listas</a>
+                  <a href="#" class="dropdown-item">Mis calificaciones</a>
+                  <div id="admin-section" style="display: none;">
+                    <hr>
+                    <a href="admin.html" class="dropdown-item">Panel Admin</a>
+                  </div>
+                  <hr>
+                  <a href="#" id="logout-btn" class="dropdown-item">Cerrar Sesión</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
   </header>
 
-  <!-- Banner -->
-  <section class="banner">
-    <div class="banner-content">
-      <h1>Bienvenido a GeekMovies</h1>
-      <p>Descubre las mejores películas, series y animes.</p>
-      <a href="movies.html" class="btn-red">Explorar Películas</a>
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">Bienvenido.</h1>
+        <h2 class="hero-subtitle">Millones de películas, series y personas por descubrir. Explora ahora.</h2>
+        <div class="hero-search">
+          <input type="text" id="hero-search-input" placeholder="Buscar una película, serie, persona...">
+          <button id="hero-search-btn" class="search-btn-hero">Buscar</button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-background">
+      <div class="hero-gradient"></div>
     </div>
   </section>
 
-  <!-- Sección de Películas Populares -->
-  <main class="movies-section">
-    <h2 class="section-title">🔥 Películas Populares</h2>
-    <p id="loading-message">Cargando películas populares...</p>
-    <div id="popular-movies-container" class="movie-row"></div>
-  </main>
+  <!-- Trending Section -->
+  <section class="content-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-title-container">
+          <h2 class="section-title">Tendencias</h2>
+          <div class="section-switcher">
+            <button class="switcher-btn active" data-period="today">Hoy</button>
+            <button class="switcher-btn" data-period="week">Esta Semana</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="horizontal-scroll">
+        <div id="trending-movies" class="movie-cards-container">
+          <!-- Películas trending se cargan aquí -->
+          <div class="loading-cards">
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- Sección de Películas Recientes -->
-  <section class="movies-section">
-    <h2 class="section-title">✨ Recién Agregadas</h2>
-    <p id="recent-loading-message" class="loading-message">Cargando películas recientes...</p>
-    <div id="recent-movies-container" class="movie-row"></div>
+  <!-- Popular Section -->
+  <section class="content-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-title-container">
+          <h2 class="section-title">¿Qué hay de popular?</h2>
+          <div class="section-switcher">
+            <button class="switcher-btn active" data-type="movies">Películas</button>
+            <button class="switcher-btn" data-type="tv">Series</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="horizontal-scroll">
+        <div id="popular-movies" class="movie-cards-container">
+          <!-- Películas populares se cargan aquí -->
+          <div class="loading-cards">
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Free to Watch Section -->
+  <section class="content-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-title-container">
+          <h2 class="section-title">Agregadas Recientemente</h2>
+          <div class="section-switcher">
+            <button class="switcher-btn active" data-category="all">Todas</button>
+            <button class="switcher-btn" data-category="movies">Películas</button>
+            <button class="switcher-btn" data-category="tv">Series</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="horizontal-scroll">
+        <div id="recent-movies" class="movie-cards-container">
+          <!-- Películas recientes se cargan aquí -->
+          <div class="loading-cards">
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+            <div class="movie-card-skeleton"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 GeekMovies. Tu portal de entretenimiento geek.</p>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h3>🎬 GeekMovies</h3>
+          <p>La base de datos de películas más popular del mundo. Encuentra calificaciones y reseñas de las películas más recientes y mejores.</p>
+        </div>
+        
+        <div class="footer-links-grid">
+          <div class="footer-column">
+            <h4>Lo Básico</h4>
+            <ul>
+              <li><a href="#">Acerca de GMDB</a></li>
+              <li><a href="#">Contactar</a></li>
+              <li><a href="#">Foros de Soporte</a></li>
+              <li><a href="#">API</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-column">
+            <h4>Participar</h4>
+            <ul>
+              <li><a href="#">Guía de Contribución</a></li>
+              <li><a href="#">Agregar Nueva Película</a></li>
+              <li><a href="#">Agregar Nueva Serie</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-column">
+            <h4>Comunidad</h4>
+            <ul>
+              <li><a href="#">Lineamientos</a></li>
+              <li><a href="#">Discusiones</a></li>
+              <li><a href="#">Tablero de Líderes</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-column">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#">Términos de Uso</a></li>
+              <li><a href="#">API Términos de Uso</a></li>
+              <li><a href="#">Política de Privacidad</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2025 GeekMovies. Todos los derechos reservados.</p>
+      </div>
+    </div>
   </footer>
 
-  <!-- Toast para notificaciones -->
-  <div id="toast" class="toast hidden">
-    <span id="toast-message"></span>
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay" style="display: none;">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Cargando contenido...</p>
+    </div>
   </div>
 
   <!-- Scripts -->
   <script src="js/api.js"></script>
-  <script src="js/integrated-index.js"></script>
+  <script src="js/index.js"></script>
 </body>
 </html>
