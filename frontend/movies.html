@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geek Movies - Películas</title>
+  <link rel="stylesheet" href="/frontend/css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Películas</h1>
+    <nav>
+      <a href="/frontend/index.html">Inicio</a>
+      <a href="/frontend/movies.html">Películas</a>
+      <a href="/frontend/login.html">Login</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="filters">
+      <input type="text" id="search" placeholder="Buscar...">
+      <select id="genre">
+        <option value="">Todos los géneros</option>
+        <option value="acción">Acción</option>
+        <option value="comedia">Comedia</option>
+        <option value="drama">Drama</option>
+      </select>
+    </section>
+
+    <section id="movie-list" class="grid"></section>
+  </main>
+
+  <script src="/frontend/js/movies.js"></script>
+</body>
+</html>

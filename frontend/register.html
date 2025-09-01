@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeekMovies - Registro</title>
+  <link rel="stylesheet" href="css/auth.css" /> 
+  <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="login-container">
+    <h1 class="logo">GeekMovies</h1>
+    
+    <form id="registerForm">
+      <h2>Crear Cuenta</h2>
+
+      <input type="text" id="username" placeholder="Nombre de usuario" required />
+      <input type="email" id="email" placeholder="Correo electrónico" autocomplete="email" required />
+      <input type="password" id="password" placeholder="Contraseña" autocomplete="new-password" required />
+      
+      <p id="message"></p>
+
+      <button type="submit">Registrar</button>
+
+      <p class="toggle">
+        ¿Ya tienes cuenta?
+        <a href="login.html">Inicia sesión aquí</a>
+      </p>
+    </form>
+  </div>
+
+  <script src="js/register.js" defer></script>
+</body>
+</html>

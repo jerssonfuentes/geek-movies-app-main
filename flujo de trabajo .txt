@@ -1,0 +1,79 @@
+geek-movies-app/
+│── README.md              # Documentación general del proyecto
+│── .gitignore
+│
+├── backend/               # API con Node.js + Express
+│   │── server.js          # Punto de entrada (app.listen)
+│   │── package.json
+│   │── .env       # Variables de entorno ejemplo
+│   │
+│   ├── config/
+│   │   ├── db.js          # Conexión MongoDB
+│   │   ├── passport.js    # Estrategia JWT
+│   │   └── swagger.js     # Configuración Swagger
+│   │
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   ├── user.controller.js
+│   │   ├── movie.controller.js
+│   │   ├── category.controller.js
+│   │   └── review.controller.js
+│   │
+│   ├── middlewares/
+│   │   ├── auth.middleware.js
+│   │   ├── error.middleware.js
+│   │   └── rateLimit.js
+│   │
+│   ├── models/
+│   │   ├── user.model.js
+│   │   ├── movie.model.js
+│   │   ├── category.model.js
+│   │   └── review.model.js
+│   │
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   ├── user.routes.js
+│   │   ├── movie.routes.js
+│   │   ├── category.routes.js
+│   │   └── review.routes.js
+│   │
+│   ├── services/
+│   │   ├── auth.service.js
+│   │   ├── movie.service.js
+│   │   └── review.service.js
+│   │
+│   ├── utils/
+│   │   ├── validators.js
+│   │   ├── response.js
+│   │   └── ranking.js
+│   │
+│   └── docs/
+│       ├── api-docs.json
+│       └── SCRUM-PLAN.pdf   # Documento SCRUM (roles, historias, sprints, evidencias)
+│
+├── frontend/              # HTML + CSS + JS puro
+│   │── index.html          # Inicio (listado inicial de pelis)
+│   │── login.html          # Login y registro
+│   │── movies.html         # Listado + filtros
+│   │── detail.html         # Detalle de película
+│   │── admin.html          # Panel administrador
+│   │
+│   ├── css/
+│   │   ├── styles.css      # Estilos globales
+│   │   ├── auth.css        # Login/registro
+│   │   ├── movies.css      # Listado y filtros
+│   │   └── admin.css       # Panel administrador
+│   │
+│   ├── js/
+│   │   ├── api.js          # Configuración base de fetch hacia backend
+│   │   ├── auth.js         # Manejo de login/registro
+│   │   ├── movies.js       # Lógica de listado/filtros
+│   │   ├── detail.js       # Manejo detalle de película
+│   │   └── admin.js        # CRUD desde panel admin
+│   │
+│   └── assets/
+│       ├── img/            # Imágenes (posters, logos, placeholders)
+│       └── icons/          # Íconos
+│
+└── docs/
+    └── VIDEO-LINK.txt      # Enlace al video de entrega (cuando lo graben

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geek Movies</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navbar estilo Netflix -->
+  <header class="navbar">
+    <div class="logo">GeekMovies</div>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="movies.html">Películas</a>
+      <a href="login.html" id="login-link">Login</a>
+      <a href="register.html" id="register-link">Register</a>
+      <a href="#" id="logout-link" class="hidden">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Banner -->
+  <section class="banner">
+    <div class="banner-content">
+      <h1>Bienvenido a GeekMovies</h1>
+      <p>Descubre las mejores películas, series y animes.</p>
+    </div>
+  </section>
+
+  <!-- Sección de Películas -->
+  <main class="movies-section">
+    <h2>Películas Populares</h2>
+    <p id="loading-message">Cargando...</p>
+    <div id="movies-container" class="movie-row"></div>
+  </main>
+
+  <script src="js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeekMovies - Login</title>
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="login-container">
+    <h1 class="logo">GeekMovies</h1>
+    
+    <form id="loginForm">
+      <h2>Iniciar Sesión</h2>
+
+      <input 
+        type="email" 
+        id="email" 
+        name="email" 
+        placeholder="Correo electrónico" 
+        autocomplete="email" 
+        required 
+      />
+      <input 
+        type="password" 
+        id="password" 
+        name="password" 
+        placeholder="Contraseña" 
+        autocomplete="current-password" 
+        required 
+      />
+
+      <p id="message"></p>
+
+      <button type="submit">Iniciar Sesión</button>
+
+      <p class="toggle">
+        ¿No tienes cuenta?
+        <a href="register.html" id="toggleForm">Regístrate aquí</a>
+      </p>
+    </form>
+  </div>
+
+  <script src="js/auth.js" defer></script>
+</body>
+</html>

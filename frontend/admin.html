@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geek Movies - Admin</title>
+  <link rel="stylesheet" href="/frontend/css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Panel Administrador</h1>
+    <nav>
+      <a href="movies.html">Películas</a>
+      <a href="index.html">Inicio</a>
+      <a href="login.html">Salir</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Gestión de Películas</h2>
+    <form id="add-movie-form">
+      <input type="text" placeholder="Título" required>
+      <input type="text" placeholder="Género" required>
+      <textarea placeholder="Descripción"></textarea>
+      <button type="submit">Agregar Película</button>
+    </form>
+
+    <section id="admin-movie-list"></section>
+  </main>
+
+  <script src="/frontend/js/admin.js"></script>
+</body>
+</html>
