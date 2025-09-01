@@ -1,65 +1,37 @@
 // backend/seed.js
-// =====================================
-// Script de Seed para poblar la colección "movies"
-// =====================================
-
-/**
- * Este archivo inserta datos de prueba en la colección "movies".
- * Para ejecutarlo:
- * 
- *   node backend/seed.js
- * 
- * Requisitos:
- * - Tener el archivo .env con la variable MONGO_URI configurada.
- * - Haber creado la base de datos geek_movies (se crea sola si no existe).
- */
-
-const { connectDB, getDb } = require('./config/db'); // ✅ Importar correctamente
-require('dotenv').config();
+const { connectDB, getDb } = require('./config/db');
 
 async function seedMovies() {
   try {
-    // Conectar a MongoDB
     await connectDB();
     const db = getDb();
 
-    // Obtener la colección "movies"
-    const moviesCollection = db.collection('movies');
-
-    // Limpiar la colección antes de insertar
-    await moviesCollection.deleteMany({});
-    console.log("🗑️ Colección 'movies' limpiada.");
-
-    // Datos de prueba
     const movies = [
       {
         title: "The Matrix",
-        category: "Ciencia Ficción",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg",
         ranking: 9.0,
-        imageUrl: "https://m.media-amazon.com/images/I/51EG732BV3L.jpg",
-        description: "Un hacker descubre la verdad sobre su realidad y su papel en la guerra contra sus controladores."
+        category: "Sci-Fi"
       },
       {
         title: "Inception",
-        category: "Acción",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/en/7/7e/Inception_ver3.jpg",
         ranking: 8.8,
-        imageUrl: "https://m.media-amazon.com/images/I/5101wltD5XL._AC_SY445_.jpg",
-        description: "Un ladrón que roba secretos a través de sueños debe implantar una idea en la mente de un CEO."
+        category: "Sci-Fi"
       },
       {
         title: "Interstellar",
-        category: "Aventura",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg",
         ranking: 8.6,
-        imageUrl: "https://m.media-amazon.com/images/I/71n58aCRiML._AC_SY679_.jpg",
-        description: "Un grupo de astronautas viaja a través de un agujero de gusano para salvar a la humanidad."
+        category: "Sci-Fi"
       }
     ];
 
-    // Insertar datos
-    await moviesCollection.insertMany(movies);
-    console.log("✅ Películas insertadas correctamente en la colección 'movies'");
+    await db.collection('movies').deleteMany(); // limpiar colección
+    await db.collection('movies').insertMany(movies);
 
-    process.exit(0); // Finalizar proceso
+    console.log("✅ Seed ejecutado correctamente");
+    process.exit();
   } catch (error) {
     console.error("❌ Error en el seed:", error);
     process.exit(1);

@@ -16,6 +16,7 @@
       <a href="login.html" id="login-link">Login</a>
       <a href="register.html" id="register-link">Register</a>
       <a href="#" id="logout-link" class="hidden">Logout</a>
+      <a href="admin.html" id="admin-link" class="hidden">Admin</a>
     </nav>
   </header>
 
@@ -24,16 +25,36 @@
     <div class="banner-content">
       <h1>Bienvenido a GeekMovies</h1>
       <p>Descubre las mejores películas, series y animes.</p>
+      <a href="movies.html" class="btn-red">Explorar Películas</a>
     </div>
   </section>
 
-  <!-- Sección de Películas -->
+  <!-- Sección de Películas Populares -->
   <main class="movies-section">
-    <h2>Películas Populares</h2>
-    <p id="loading-message">Cargando...</p>
-    <div id="movies-container" class="movie-row"></div>
+    <h2 class="section-title">🔥 Películas Populares</h2>
+    <p id="loading-message">Cargando películas populares...</p>
+    <div id="popular-movies-container" class="movie-row"></div>
   </main>
 
-  <script src="js/index.js"></script>
+  <!-- Sección de Películas Recientes -->
+  <section class="movies-section">
+    <h2 class="section-title">✨ Recién Agregadas</h2>
+    <p id="recent-loading-message" class="loading-message">Cargando películas recientes...</p>
+    <div id="recent-movies-container" class="movie-row"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 GeekMovies. Tu portal de entretenimiento geek.</p>
+  </footer>
+
+  <!-- Toast para notificaciones -->
+  <div id="toast" class="toast hidden">
+    <span id="toast-message"></span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/integrated-index.js"></script>
 </body>
 </html>
